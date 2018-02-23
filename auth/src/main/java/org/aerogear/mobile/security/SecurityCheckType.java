@@ -17,6 +17,7 @@ public enum SecurityCheckType {
      */
     IS_ROOTED(new RootedCheck()),
     /**
+<<<<<<< HEAD
      * Detect if developer mode is enabled in the device.
      *
      * @return <code>true</code> if developer mode is enabled in the device.
@@ -40,7 +41,6 @@ public enum SecurityCheckType {
      * @return <code>true</code> if device has a screen lock enabled.
      */
     HAS_SCREEN_LOCK(new ScreenLockCheck());
-
 
     private SecurityCheck check;
 
