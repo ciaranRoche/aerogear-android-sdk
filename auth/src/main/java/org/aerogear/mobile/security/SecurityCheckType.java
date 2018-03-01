@@ -4,6 +4,7 @@ package org.aerogear.mobile.security;
 import org.aerogear.mobile.security.checks.DeveloperModeCheck;
 import org.aerogear.mobile.security.checks.DebuggerCheck;
 import org.aerogear.mobile.security.checks.EmulatorCheck;
+import org.aerogear.mobile.security.checks.EncryptionCheck;
 import org.aerogear.mobile.security.checks.RootedCheck;
 import org.aerogear.mobile.security.checks.ScreenLockCheck;
 
@@ -36,7 +37,11 @@ public enum SecurityCheckType {
      *  Detect whether a screen lock is enabled (PIN, Password etc).
      *  See {@link ScreenLockCheck}
      */
-    SCREEN_LOCK_ENABLED(new ScreenLockCheck());
+    SCREEN_LOCK_ENABLED(new ScreenLockCheck()),
+    /**
+     * Detect whether a devices filesystem is encrypted.
+     */
+    HAS_ENCRYPTION_ENABLED(new EncryptionCheck());
 
     private SecurityCheck check;
 
