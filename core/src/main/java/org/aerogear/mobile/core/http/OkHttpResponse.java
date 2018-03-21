@@ -1,10 +1,14 @@
 package org.aerogear.mobile.core.http;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import org.aerogear.mobile.core.executor.AppExecutors;
+
+import javax.net.ssl.SSLPeerUnverifiedException;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -26,6 +30,9 @@ class OkHttpResponse implements HttpResponse {
                 response = okHttpCall.execute();
                 requestCompleteLatch.countDown();
                 runSuccessHandler();
+            } catch (SSLPeerUnverifiedException e){
+                error = e;
+                runErrorHandler();
             } catch (IOException e) {
                 error = e;
                 requestCompleteLatch.countDown();
@@ -93,6 +100,7 @@ class OkHttpResponse implements HttpResponse {
 
     @Override
     public int getStatus() {
+        Log.i("blaStatus", response.toString());
         return response.code();
     }
 

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.aerogear.mobile.core.http.OkHttpCertificatePinning;
 import org.json.JSONException;
 
 import android.content.Context;
@@ -25,7 +26,6 @@ import org.aerogear.mobile.core.http.OkHttpServiceModule;
 import org.aerogear.mobile.core.logging.Logger;
 import org.aerogear.mobile.core.logging.LoggerAdapter;
 
-import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 
 /**
@@ -78,17 +78,13 @@ public final class MobileCore {
         // -- Set the app version variable
         appVersion = getAppVersion(context);
 
-        // -- Creating OkHttp Certificate Pinner
-        CertificatePinner.Builder certPinnerBuilder = new CertificatePinner.Builder();
-        for (Map.Entry<String, String> https : httpsConfig.entrySet()) {
-            certPinnerBuilder.add(https.getKey(), "sha256/" + https.getValue());
-        }
-        CertificatePinner certificatePinner = certPinnerBuilder.build();
-
         // -- Setting default http layer
         if (options.httpServiceModule == null) {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.certificatePinner(certificatePinner);
+
+            OkHttpCertificatePinning certificatePinning = new OkHttpCertificatePinning(httpsConfig);
+            builder.certificatePinner(certificatePinning.pinCertificates());
+
             builder.connectTimeout(DEFAULT_CONNECT_TIMEOUT, TimeUnit.SECONDS)
                             .writeTimeout(DEFAULT_WRITE_TIMEOUT, TimeUnit.SECONDS)
                             .readTimeout(DEFAULT_READ_TIMEOUT, TimeUnit.SECONDS);

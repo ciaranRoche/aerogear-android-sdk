@@ -38,7 +38,6 @@ public class MobileCoreTest {
     @Before
     public void setUp() throws Exception {
         Application context = RuntimeEnvironment.application;
-
         core = MobileCore.init(context);
 
         MobileCore.Options options = new MobileCore.Options();

@@ -4,6 +4,7 @@ import static org.aerogear.mobile.core.utils.SanityCheck.nonNull;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.aerogear.mobile.auth.configuration.AuthServiceConfiguration;
 import org.aerogear.mobile.auth.configuration.KeycloakConfiguration;
@@ -16,7 +17,12 @@ import net.openid.appauth.AuthorizationServiceConfiguration;
 import net.openid.appauth.ResponseTypeValues;
 import net.openid.appauth.browser.BrowserBlacklist;
 import net.openid.appauth.browser.VersionedBrowserMatcher;
+import net.openid.appauth.connectivity.ConnectionBuilder;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 /**
  * Factory class used to create the 'openid' classes.
  */
@@ -58,7 +64,7 @@ public class AuthorizationServiceFactory {
 
     /**
      * Builds a new AuthorizationServiceFactory
-     * 
+     *
      * @param appContext the application context
      */
     public AuthorizationServiceFactory(@NonNull final Context appContext) {
@@ -68,7 +74,7 @@ public class AuthorizationServiceFactory {
     /**
      * Creates and initializes a new {@link AuthorizationService} ready to be used for
      * authenticating with Keycloak.
-     * 
+     *
      * @param keycloakConfiguration configuration to be used to access keycloak
      * @param authServiceConfiguration the authentication singleThreadService configuration
      * @return a wrapper object containing all the `openid` object used to handle the OIDC
@@ -88,7 +94,17 @@ public class AuthorizationServiceFactory {
 
         AppAuthConfiguration.Builder appAuthConfigurationBuilder =
                         new AppAuthConfiguration.Builder().setBrowserMatcher(new BrowserBlacklist(
-                                        VersionedBrowserMatcher.CHROME_CUSTOM_TAB));
+                                        VersionedBrowserMatcher.CHROME_CUSTOM_TAB))
+//                            .setConnectionBuilder((ConnectionBuilder) uri -> {
+//                                URL url = new URL(uri.toString());
+//                                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                                if(connection instanceof HttpsURLConnection){
+//                                    HttpsURLConnection httpsConnection = (HttpsURLConnection) connection;
+//                                    Log.i("blaconnection", httpsConnection.toString());
+//                                }
+//                                return connection;
+//                            })
+            ;
 
         AppAuthConfiguration appAuthConfig = appAuthConfigurationBuilder.build();
 

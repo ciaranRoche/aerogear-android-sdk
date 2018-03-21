@@ -53,7 +53,7 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void onError(Throwable error) {
                 // there is an error during the login
-                Log.e(TAG, "logined failed due to error " + error.getLocalizedMessage());
+                Log.e(TAG, "login failed due to error " + error.getLocalizedMessage());
             }
         });
     }
