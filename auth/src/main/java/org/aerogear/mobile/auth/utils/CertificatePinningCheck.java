@@ -1,5 +1,7 @@
 package org.aerogear.mobile.auth.utils;
 
+import android.util.Log;
+
 import org.aerogear.mobile.core.http.HttpRequest;
 import org.aerogear.mobile.core.http.HttpResponse;
 import org.aerogear.mobile.core.http.HttpServiceModule;
@@ -14,12 +16,14 @@ public class CertificatePinningCheck {
         this.httpModule = httpModule;
     }
 
-    public void check(final String url) {
+    public HttpResponse check(final String url) {
+        Log.i("<<<", url);
         HttpRequest request = httpModule.newRequest();
         request.get(url);
-        HttpResponse response = request.execute();
-        response.onError(() -> this.error = response.getError());
-        response.onComplete(() -> this.isComplete = true);
+//        HttpResponse response = request.execute();
+//        response.onError(() -> this.error = response.getError());
+//        response.onComplete(() -> this.isComplete = true);
+        return request.execute();
     }
 
     public boolean isComplete() {

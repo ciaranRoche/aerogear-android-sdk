@@ -31,6 +31,10 @@
         {
             "host": "keycloak.security.feedhenry.org",
             "certificateHash": "trENjoQnbWupnAtu1/WagBE0RgJ+p7ke2ppWML8vAl0="
+        },{
+            "host": "jsonplaceholder.typicode.com/users",
+            "certificateHash": "bla="
+
         }
     ]
 }

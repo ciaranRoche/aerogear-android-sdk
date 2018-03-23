@@ -206,7 +206,7 @@ public class AuthService implements ServiceModule {
 
         CertificatePinningCheck pinningCheck =
                         new CertificatePinningCheck(this.mobileCore.getHttpLayer());
-        pinningCheck.check(this.serviceConfiguration.getUrl());
+        //pinningCheck.check(this.serviceConfiguration.getUrl());
 
         this.appContext = nonNull(context, "context");
         this.authStateManager = AuthStateManager.getInstance(context);

@@ -11,6 +11,7 @@ import org.jose4j.jwk.JsonWebKeySet;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import org.aerogear.mobile.auth.AuthStateManager;
 import org.aerogear.mobile.auth.authenticator.AbstractAuthenticator;
@@ -102,18 +103,34 @@ public class OIDCAuthenticatorImpl extends AbstractAuthenticator {
     // Authentication code
     private void performAuthRequest(final Activity fromActivity, final int resultCode) {
         nonNull(fromActivity, "fromActivity");
-        if (this.certificatePinningCheck.getError() != null) {
-            throw new IllegalStateException(this.certificatePinningCheck.getError());
-        }
-        AuthorizationServiceFactory.ServiceWrapper wrapper =
-                        this.authorizationServiceFactory.createAuthorizationService(
-                                        keycloakConfiguration, authServiceConfiguration);
-        this.authState = wrapper.getAuthState();
-        this.authService = wrapper.getAuthorizationService();
 
-        Intent authIntent = authService
-                        .getAuthorizationRequestIntent(wrapper.getAuthorizationRequest());
-        fromActivity.startActivityForResult(authIntent, resultCode);
+        HttpResponse response = certificatePinningCheck.check("https://jsonplaceholder.typicode.com/users");
+        response.onError(() -> {
+            Log.i("<<<<", response.getError().toString());
+        });
+        response.onSuccess(() -> {
+            AuthorizationServiceFactory.ServiceWrapper wrapper =
+                this.authorizationServiceFactory.createAuthorizationService(
+                    keycloakConfiguration, authServiceConfiguration);
+            this.authState = wrapper.getAuthState();
+            this.authService = wrapper.getAuthorizationService();
+
+            Intent authIntent = authService
+                .getAuthorizationRequestIntent(wrapper.getAuthorizationRequest());
+            fromActivity.startActivityForResult(authIntent, resultCode);
+        });
+//        if (this.certificatePinningCheck.getError() != null) {
+//            throw new IllegalStateException(this.certificatePinningCheck.getError());
+//        }
+//        AuthorizationServiceFactory.ServiceWrapper wrapper =
+//                        this.authorizationServiceFactory.createAuthorizationService(
+//                                        keycloakConfiguration, authServiceConfiguration);
+//        this.authState = wrapper.getAuthState();
+//        this.authService = wrapper.getAuthorizationService();
+//
+//        Intent authIntent = authService
+//                        .getAuthorizationRequestIntent(wrapper.getAuthorizationRequest());
+//        fromActivity.startActivityForResult(authIntent, resultCode);
     }
 
     public void handleAuthResult(final Intent intent) {
